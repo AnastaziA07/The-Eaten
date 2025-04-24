@@ -17,8 +17,6 @@ return
 label bedroom :
     scene bg bedroom
         play music "morning-in-the-mountains-201840g" fadeout 1
-    //มีเสียงพื้นหลังฟิลตอนเช้า
-    //เสียงรับสายโทรศัพท์
      playername "Hello?"
 
 return
