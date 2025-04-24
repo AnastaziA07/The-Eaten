@@ -10,7 +10,12 @@ label start:
         $ playername = "Kenji"
     playername "I'm [playername]."
     return
-label Fcall:
+label History:
+    scene bg histoty
+return
+
+label bedroom :
     scene bg bedroom
 return
+
 
