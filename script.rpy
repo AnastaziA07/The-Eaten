@@ -1,5 +1,4 @@
 ﻿
-define e = Character("Eileen")
 define playername = Character("[playername]")
 
 label start:
