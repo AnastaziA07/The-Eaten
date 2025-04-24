@@ -1,6 +1,6 @@
 ﻿
 define playername = Character("[playername]")
-define define f = Character("Father")
+define Father = Character("Father")
 label start:
     scene bg login
     $ playername = renpy.input("Identify yourself",length=32)
@@ -16,6 +16,11 @@ return
 
 label bedroom :
     scene bg bedroom
+        play music "morning-in-the-mountains-201840g" fadeout 1
+    //มีเสียงพื้นหลังฟิลตอนเช้า
+    //เสียงรับสายโทรศัพท์
+     playername "Hello?"
+
 return
 
 
