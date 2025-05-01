@@ -188,9 +188,67 @@ label questiontime1 :
             "the priest think that you are a threat"
 
             "throw a punch" :
+                jump menu2
             "dodge" :
+                jump menu3
+
             
         hide screen countdown
         jump dead
+
+    label menu2 :
+                $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'menu2_slow'
+        show screen countdown
+
+        menu :
+            "the priest gets dizzy what will you do next?"
+
+            "throw another puch" :
+                jump getpunch
+
+            "dodge":
+                jump menu3
+
+            "ask him again":
+                jump getpunch
+
+        hide screen countdown
+        jump dead
+
+    label getpunch :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'getpunch_slow'
+        show screen countdown
+
+        menu :
+        "you got dizzy what will you do next?"
+
+    "run away"
+    jump dead
+    "throw a punch"
+    jump menu3
+    "ask him agian"
+    jump getpunch
+
+    hide screen countdown
+        jump dead
+    
+    label menu3 :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'menu3_slow'
+        show screen countdown
+
+        menu:
+            "your action?"
+            "throw a puch":
+                jump menu2
+
+        hide screen countdown
+        jump dead
+
 
     return
