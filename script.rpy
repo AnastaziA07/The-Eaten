@@ -52,28 +52,28 @@ label bedroom:
 
     return
 
-label funeral:
+label funeral :
     play music "funeral.mp3" fadein 0.5
     scene bg funeral
     with dissolve
 
     scene bg met the priest
     with dissolve
+
+    "Your action?"
     
-    menu :
-        "Your action?"
+    menu:
+        "Ask the priest what is he doing":
+            jump askpriest
 
-    "ask the priest what is he doing"
-    jump askpriest
+        "insult the priest":
+            jump insult
 
-    "insult the priest"
-    jump insult
+        "keep watching" :
+            jump keepwatch
 
-    "keep watching"
-    jump keepwatch
-
-    "take a picture"
-    jump takeapic
+        "take a picture" :
+            jump takeapic
 
 
     return
@@ -97,6 +97,7 @@ label keepwatch :
 label insult :
 
     playername "What on earth are you doing with my granma!!"
+
     jump fight
 
     return
@@ -108,7 +109,7 @@ label askpriest :
     playername "what are you doing?"
     priest "*surprised* I'm just doing an extra rite for mrs.angela"
 
-menu :
+menu:
     "Your action?"
 
     "ask again" :
@@ -124,13 +125,13 @@ label askpriestsecondtime :
     playername "I don't remember there's an extra rite.. ,what are you doing?"
     priest "*gloomy face* I'm just doing an extra rite for mrs.angela.."
 
-    menu :
+    menu:
         "Your action?"
 
-        "go back home" :
+        "Go back home" :
             jump dead
 
-        "ask again" :
+        "Ask again" :
             jump askpriestthirdtime
 
     return
@@ -164,6 +165,8 @@ label dead :
     scene bg dead
     with dissolve
     return
+"You died"
+#add cut scene eaten
 
 label fight :
 
@@ -183,35 +186,33 @@ label questiontime1 :
         $ timer_range = 5
         $ timer_jump = 'menu1_slow'
         show screen countdown
-
-        menu :
-            "the priest think that you are a threat"
-
-            "throw a punch" :
+    menu :
+        "The priest think that you are a threat"
+        "Throw a punch" :
                 jump menu2
-            "dodge" :
+        "Dodge" :
                 jump menu3
 
             
-        hide screen countdown
-        jump dead
+    hide screen countdown
+    jump getpunch
 
     label menu2 :
-                $ time = 5
+        $ time = 5
         $ timer_range = 5
         $ timer_jump = 'menu2_slow'
         show screen countdown
 
-        menu :
-            "the priest gets dizzy what will you do next?"
+        "The priest gets dizzy what will you do next?"
 
-            "throw another puch" :
+        menu:
+            "Throw another puch":
                 jump getpunch
 
-            "dodge":
+            "Dodge":
                 jump menu3
 
-            "ask him again":
+            "Ask him again":
                 jump getpunch
 
         hide screen countdown
@@ -223,18 +224,43 @@ label questiontime1 :
         $ timer_jump = 'getpunch_slow'
         show screen countdown
 
-        menu :
-        "you got dizzy what will you do next?"
+        "You get dizzy what will you do next?"
 
-    "run away"
-    jump dead
-    "throw a punch"
-    jump menu3
-    "ask him agian"
-    jump getpunch
+        menu:
+            "Run away":
+                jump dead
+
+            "Throw a punch":
+                jump priestfakepassout
+
+            "Ask him agian":
+                jump getpunch
+            "Dodge":
+                jump lostsomeenrgy
 
     hide screen countdown
-        jump dead
+    jump dead
+
+    label lostsomeenrgy :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'lostsomeenrgy_slow'
+        show screen countdown
+
+        "You have lost some enenergy what will you do next?"
+
+        menu:
+            "Run away":
+                jump dead
+            "Throw a punch":
+                jump priestfakepassout
+            "Ask him agian":
+                jump getpunch
+            "Dodge":
+                jump getpunch
+
+    hide screen countdown
+    jump dead
     
     label menu3 :
         $ time = 5
@@ -242,13 +268,29 @@ label questiontime1 :
         $ timer_jump = 'menu3_slow'
         show screen countdown
 
+        "Your action?"
+
         menu:
-            "your action?"
-            "throw a puch":
-                jump menu2
+            "Run away":
+                jump dead
+            "Throw a punch":
+                jump priestfakepassout
+            "Ask him agian":
+                jump getpunch
+            "Dodge":
+                jump getpunch
 
         hide screen countdown
         jump dead
 
+    label priestfakepassout :
+        "The priest has pass out ,what will you do next? "
+    menu:
+        "Call the police":
+            jump dead
+        "Go back home":
+            jump bedroom
+        "Call out for help":
+            jump dead
 
     return
