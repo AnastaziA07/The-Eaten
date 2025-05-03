@@ -19,9 +19,20 @@ label start:
 
 label history:
     play music "nocturnal-fantasy-enchanted-loop-284212.mp3" fadein 0.5
-    scene library
+    scene Eat
     with dissolve
-    "Hiya"
+    scene seprate
+    with dissolve
+    scene sepatetodarkside
+    with dissolve
+    scene trio
+    with dissolve
+    scene Who 
+    with dissolve
+    scene promise
+    with dissolve
+    scene brokenpromise
+    with dissolve
     stop music fadeout 0.5
 
     jump bedroom
@@ -30,9 +41,18 @@ label history:
 
 label bedroom:
     play music "morning.mp3" fadein 0.5
-    scene bedroom
+    scene wakeupclose
     with dissolve
-
+    scene wakeupopen
+    with dissolve
+    scene wakeupnotice
+    with dissolve
+    scene phonering
+    with dissolve
+    scene phonehand
+    with dissolve
+    scene phonegrab
+    with dissolve
     play sound "phonecall.mp3" fadein 0.5 volume 0.1
     queue sound "phone-pick-up-46796.mp3" fadein 0.5 volume 0.5
 
@@ -185,9 +205,10 @@ label questiontime1 :
         $ time = 5
         $ timer_range = 5
         $ timer_jump = 'menu1_slow'
-        show screen countdown
-    menu :
+        show screen_countdown
         "The priest think that you are a threat"
+    menu:
+
         "Throw a punch" :
                 jump menu2
         "Dodge" :
@@ -201,7 +222,7 @@ label questiontime1 :
         $ time = 5
         $ timer_range = 5
         $ timer_jump = 'menu2_slow'
-        show screen countdown
+        show screen_countdown
 
         "The priest gets dizzy what will you do next?"
 
