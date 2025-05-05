@@ -190,22 +190,32 @@ label dead :
 
 label fight :
 
-    init :
-        $ timer_range = 0
-        $ timer_jump = 0
-        $ time = 0
+    transform alpha_dissolve:
+        alpha 0.0
+        linear 0.5 alpha 1.0
+        on hide:
+            linear 0.5 alpha 0
+    # This is to fade the bar in and out, and is only required once in your script
 
-        screen countdown :
-            timer 0.01 repeat True action If(time > 0,true=SetVariable('time', time -0.01),false=[Hide('countdown'), Jump(timer_jump)])
-            bar value time range timer_range xalign 0.5 yalign 0.9 xmaximum 300 at alpha_dissolve
+init: ### just setting variables in advance so there are no undefined variable problems
+    $ timer_range = 0
+    $ timer_jump = 0
+    $ time = 0
+
+screen countdown:
+    timer 0.01 repeat True action If(time > 0, true=SetVariable('time', time - 0.01), false=[Hide('countdown'), Jump(timer_jump)]) 
+        ### ^this code decreases variable time by 0.01 until time hits 0, at which point, the game jumps to label timer_jump (timer_jump is another variable that will be defined later)
+
+    bar value time range timer_range xalign 0.5 yalign 0.9 xmaximum 300 at alpha_dissolve 
+        # ^This is the timer bar.
 
 label questiontime1 :
 
     label menu1 :
         $ time = 5
         $ timer_range = 5
-        $ timer_jump = 'menu1_slow'
-        show screen_countdown
+        $ timer_jump = 'getpunch'
+        show screen countdown
         "The priest think that you are a threat"
     menu:
 
@@ -221,8 +231,8 @@ label questiontime1 :
     label menu2 :
         $ time = 5
         $ timer_range = 5
-        $ timer_jump = 'menu2_slow'
-        show screen_countdown
+        $ timer_jump = 'getpunch'
+        show screen countdown
 
         "The priest gets dizzy what will you do next?"
 
@@ -242,7 +252,7 @@ label questiontime1 :
     label getpunch :
         $ time = 5
         $ timer_range = 5
-        $ timer_jump = 'getpunch_slow'
+        $ timer_jump = 'getpunch'
         show screen countdown
 
         "You get dizzy what will you do next?"
@@ -265,7 +275,7 @@ label questiontime1 :
     label lostsomeenrgy :
         $ time = 5
         $ timer_range = 5
-        $ timer_jump = 'lostsomeenrgy_slow'
+        $ timer_jump = 'lostsomeenrgy'
         show screen countdown
 
         "You have lost some enenergy what will you do next?"
@@ -286,7 +296,7 @@ label questiontime1 :
     label menu3 :
         $ time = 5
         $ timer_range = 5
-        $ timer_jump = 'menu3_slow'
+        $ timer_jump = 'dead'
         show screen countdown
 
         "Your action?"
