@@ -2,6 +2,26 @@
 define playername = Character("[playername]")
 define Father = Character("Father")
 define priest = Character("Priest")
+
+screen scene_interact():
+
+    # ปุ่มไปชิงช้า
+    imagebutton:
+        idle "exchage_prob.png"        # รูปตอนยังไม่ชี้เมาส์
+        hover "exchage_prob_click.png"      # รูปตอนชี้เมาส์
+        xpos 500
+        ypos 200
+        action Jump("swing")
+
+    # ปุ่มเมื่อกดไปที่เด็ก
+    imagebutton:
+        idle "exchage_prob.png"        # รูปตอนยังไม่ชี้เมาส์
+        hover "exchage_prob_click.png"      # รูปตอนชี้เมาส์
+        xpos 100
+        ypos 200
+        action Jump("children")
+
+
 label start:
 
     scene bg login
@@ -35,11 +55,15 @@ label history:
     with dissolve
     stop music fadeout 0.5
 
-    jump bedroom
+    jump bedroomscene
 
     return
 
 label bedroom:
+    scene bg bedroom
+    return
+
+label bedroomscene:
     play music "morning.mp3" fadein 0.5
     scene wakeupclose
     with dissolve
@@ -167,9 +191,58 @@ label askpriestthirdtime :
 label chruch:
     scene bg chruch
     with dissolve
+    
     return
 
 label children:
+    scene bg children
+    show po normal at left
+    show kids happy at right
+
+    playername "Hey kids, do you happen to know the person in this picture?"
+
+    kid "Oh! You mean this scientist guy? Yeah, I kind of know who he is."
+
+    kid "But first, you have to help us find three items — a windmill, a robot, and a wooden sword."
+
+    playername "Alright, kids. But you'd better not break your promise."
+
+    kid "We promise!!"
+
+
+    return
+
+label swing:
+    scene bg swing
+    with dissolve
+    label playground_event:
+
+    playername"Ugh... I'm so stressed out."
+
+    show kids happy at right
+    with dissolve
+
+    kid "Hey!! Big bro!"
+
+    playername "Huh?! What is it?"
+
+    kid "Why are you so stressed, big bro? We've been watching you frown for a while now."
+
+    playername "Well... I've got something on my mind."
+
+    "(Po tells the kids about what's been bothering him.)"
+
+    kid "Hmm... Then let us take you to a scientist we know. I think he might be able to help you."
+
+    kid "But you have to help us find three items first — a windmill, a robot, and a wooden sword."
+
+    playername "Alright, kids. But you better keep your promise."
+
+    kid "You got it!!"
+    
+    $ quest_active = True
+    $ quest_items = []
+
 
     return
 
