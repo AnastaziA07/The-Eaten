@@ -44,7 +44,7 @@ screen scene_interact():
 
 label start:
 
-    scene bg login
+    scene name
     show screen quest_notification
     with fade
     $ playername = renpy.input("Identify yourself",length=32)
