@@ -1,7 +1,27 @@
-
+screen wait_screen(duration=2.0):
+    timer duration action Return()
+    key "mouseup_1" action NullAction()  # ปิดการคลิกซ้าย
 define playername = Character("[playername]")
 define Father = Character("Father")
 define priest = Character("Priest")
+
+default current_time = "morning"   # ค่าตั้งต้นคือเช้า
+default interaction_count = 0      # จำนวนการคุยที่เกิดขึ้นในวันนั้น
+
+# ฟังก์ชันอัปเดตเวลา
+init python:
+    def update_time():
+        global interaction_count
+        global current_time
+
+        interaction_count += 1
+        if interaction_count >= 3:
+            if current_time == "morning":
+                current_time = "night"
+            else:
+                current_time = "morning"
+            interaction_count = 0
+
 
 screen scene_interact():
 
@@ -25,6 +45,7 @@ screen scene_interact():
 label start:
 
     scene bg login
+    show screen quest_notification
     with fade
     $ playername = renpy.input("Identify yourself",length=32)
     $ playername = playername.strip()
@@ -38,21 +59,42 @@ label start:
     return
 
 label history:
+    window hide  # ซ่อนหน้าต่างข้อความก่อนเริ่ม
     play music "nocturnal-fantasy-enchanted-loop-284212.mp3" fadein 0.5
-    scene Eat
-    with dissolve
-    scene seprate
-    with dissolve
-    scene sepatetodarkside
-    with dissolve
-    scene trio
-    with dissolve
-    scene Who 
-    with dissolve
-    scene promise
-    with dissolve
-    scene brokenpromise
-    with dissolve
+    scene ritual with dissolve
+    call screen wait_screen(2.0)
+    "A long time ago, the belief in reincarnation emerged"
+    window hide
+    scene seprate with dissolve
+    call screen wait_screen(2.0)
+    window show
+    "Giving rise to a grand cult that called itself the 'Messengers of the Afterlife.' They claimed to communicate with the god of Saṅsarās, the deity who governs the cycle of life. Thus began the ritual of delivering messages to the deceased—a practice that initially consisted of simple burials, cremations, and brief blessings."
+    window hide
+    scene sepatetodarkside with dissolve
+    call screen wait_screen(2.0)
+    window show
+    "Over time, however, these customs evolved into elaborate ceremonies accepted as normal, with no one questioning where these people came from. As long as they believed in the same ideals, no doubt was cast upon them."
+    window hide
+    scene trio with dissolve
+    call screen wait_screen(2.0)
+    window show
+    "Then came the modern era—the Age of Truth—a time when the new generation no longer accepted blind faith, but sought evidence behind every belief. These truth-seekers became known as scientists."
+    window hide
+    scene Who with dissolve
+    call screen wait_screen(2.0)
+    window show
+    "In the beginning, society resisted them, for their truths contradicted the long-standing faith. But the scientists did not give up. They continued to seek out the truth and share it with the world, leading us to the present day—an age where belief and science coexist in harmony."
+    window hide
+    scene promise with dissolve
+    call screen wait_screen(2.0)
+    window show
+    "That harmony, however..."
+    window hide
+    scene brokenpromise with dissolve
+    call screen wait_screen(2.0)
+    window show
+    " would soon be shattered... For the deity once revered was not the exalted being people worshipped, but rather a dangerous entity to be feared."
+    window hide
     stop music fadeout 0.5
 
     jump bedroomscene
@@ -60,23 +102,23 @@ label history:
     return
 
 label bedroom:
-    scene bg bedroom
+    scene bedroom
     return
 
 label bedroomscene:
     play music "morning.mp3" fadein 0.5
-    scene wakeupclose
-    with dissolve
-    scene wakeupopen
-    with dissolve
-    scene wakeupnotice
-    with dissolve
-    scene phonering
-    with dissolve
-    scene phonehand
-    with dissolve
-    scene phonegrab
-    with dissolve
+    scene wakeupclose with dissolve
+    call screen wait_screen(2.0)
+    scene wakeupopen with dissolve
+    call screen wait_screen(2.0)
+    scene wakeupnotice with dissolve
+    call screen wait_screen(2.0)
+    scene phonering with dissolve
+    call screen wait_screen(2.0)
+    scene phonehand with dissolve
+    call screen wait_screen(2.0)
+    scene phonegrab with dissolve
+    call screen wait_screen(2.0)
     play sound "phonecall.mp3" fadein 0.5 volume 0.1
     queue sound "phone-pick-up-46796.mp3" fadein 0.5 volume 0.5
 
@@ -194,57 +236,7 @@ label chruch:
     
     return
 
-label children:
-    scene bg children
-    show po normal at left
-    show kids happy at right
-
-    playername "Hey kids, do you happen to know the person in this picture?"
-
-    kid "Oh! You mean this scientist guy? Yeah, I kind of know who he is."
-
-    kid "But first, you have to help us find three items — a windmill, a robot, and a wooden sword."
-
-    playername "Alright, kids. But you'd better not break your promise."
-
-    kid "We promise!!"
-
-
-    return
-
-label swing:
-    scene bg swing
-    with dissolve
-    label playground_event:
-
-    playername"Ugh... I'm so stressed out."
-
-    show kids happy at right
-    with dissolve
-
-    kid "Hey!! Big bro!"
-
-    playername "Huh?! What is it?"
-
-    kid "Why are you so stressed, big bro? We've been watching you frown for a while now."
-
-    playername "Well... I've got something on my mind."
-
-    "(Po tells the kids about what's been bothering him.)"
-
-    kid "Hmm... Then let us take you to a scientist we know. I think he might be able to help you."
-
-    kid "But you have to help us find three items first — a windmill, a robot, and a wooden sword."
-
-    playername "Alright, kids. But you better keep your promise."
-
-    kid "You got it!!"
-    
-    $ quest_active = True
-    $ quest_items = []
-
-
-    return
+######################
 
 label lab:
 
@@ -398,3 +390,159 @@ label questiontime1 :
             jump dead
 
     return
+#############################
+# เก็บไว้ใน init python หรือเริ่มต้นเกม
+init python:
+    inventory = []
+    toy_collected = False  # ของเล่นเก็บไปแล้วยัง
+    quest_1_done = False
+    current_quest = "Find the lost toys"
+
+screen show_inventory():
+    frame:
+        xalign 0.95
+        yalign 0.05
+        padding 10
+        background "#3338"
+        has vbox
+        text "🎒 Inventory" size 22 color "#fff"
+        for item in inventory:
+            text "[item]" size 18 color "#fff"
+
+
+
+label playground:
+
+    scene bg playground
+    show screen toy_scene
+    show screen quest_notification
+
+    if not toy_collected:
+        "You see something on the floor.."
+    else:
+        $ current_quest = "Give the lost toys"
+        "you have gather all the toys"
+
+
+    label children:
+    scene bg children
+    show po normal at left
+    show kids happy at right
+
+    playername "Hey kids, do you happen to know the person in this picture?"
+
+    kid "Oh! You mean this scientist guy? Yeah, I kind of know who he is."
+
+    kid "But first, you have to help us find three items — a windmill, a robot, and a wooden sword."
+
+    playername "Alright, kids. But you'd better not break your promise."
+
+    kid "We promise!!"
+
+    jump collect_item
+
+
+    return
+
+label swing:
+    scene bg swing
+    with dissolve
+    label playground_event:
+
+    playername"Ugh... I'm so stressed out."
+
+    show kids happy at right
+    with dissolve
+
+    kid "Hey!! Big bro!"
+
+    playername "Huh?! What is it?"
+
+    kid "Why are you so stressed, big bro? We've been watching you frown for a while now."
+
+    playername "Well... I've got something on my mind."
+
+    "(Po tells the kids about what's been bothering him.)"
+
+    kid "Hmm... Then let us take you to a scientist we know. I think he might be able to help you."
+
+    kid "But you have to help us find three items first — a windmill, a robot, and a wooden sword."
+
+    playername "Alright, kids. But you better keep your promise."
+
+    kid "You got it!!"
+    
+    $ quest_active = True
+    $ quest_items = []
+
+    jump collect_item
+
+
+    return
+
+label collect_item: 
+
+    scene bg playground  # ใส่พื้นหลังสนามเด็กเล่น
+
+    show screen show_inventory
+
+    show screen toy_scene
+
+screen toy_scene():
+    if not toy_collected:
+        imagebutton:
+            idle "images/exchange_prob.png"
+            hover "images/exchange_prob_click.png"
+            xpos 600
+            ypos 300
+            focus_mask True
+            action [
+                SetVariable("toy_collected", True),
+                Function(inventory.append, "Toy"),
+                Hide("toy_scene"),
+                Notify("You have pick up the toy")
+            ]
+
+    textbutton "back":
+        xpos 50
+        ypos 500
+        action Return()
+
+
+label toy_pickup:
+    call screen toy_scene
+    return
+
+
+label talk_to_kid:
+    scene bg playground_kid
+    show kid normal
+    show screen show_inventory
+    show screen quest_notification
+
+    if "Toy" in inventory:
+        "You found all the lost toy!?"
+        $ inventory.remove("Toy")
+        $ quest_1_done = True
+        "You give the toys back to the child"
+        $ current_quest = "Quest complete"
+        jump next_quest
+    else:
+        "Thank you very much.."
+
+        jump child_happy
+
+
+return
+screen quest_notification():
+    frame:
+        xalign 0.95
+        yalign 0.01
+        background "#0008"
+        padding (10, 5)
+        has vbox
+        text "Quest " size 18 color "#fff"
+        text "[current_quest]" size 16 color "#fff"
+
+
+
