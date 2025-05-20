@@ -45,7 +45,6 @@ screen scene_interact():
 label start:
 
     scene name
-    show screen quest_notification
     with fade
     $ playername = renpy.input("Identify yourself",length=32)
     $ playername = playername.strip()
@@ -62,36 +61,44 @@ label history:
     window hide  # ซ่อนหน้าต่างข้อความก่อนเริ่ม
     play music "nocturnal-fantasy-enchanted-loop-284212.mp3" fadein 0.5
     scene ritual with dissolve
-    call screen wait_screen(2.0)
+    call screen wait_screen(1.0)
     "A long time ago, the belief in reincarnation emerged"
     window hide
     scene seprate with dissolve
-    call screen wait_screen(2.0)
+    call screen wait_screen(1.0)
     window show
-    "Giving rise to a grand cult that called itself the 'Messengers of the Afterlife.' They claimed to communicate with the god of Saṅsarās, the deity who governs the cycle of life. Thus began the ritual of delivering messages to the deceased—a practice that initially consisted of simple burials, cremations, and brief blessings."
+    "Giving rise to a grand cult that called itself the 'Messengers of the Afterlife.'"
+    " They claimed to communicate with the god of Saṅsarās"
+    "The deity who governs the cycle of life."
+    " Thus began the ritual of delivering messages to the deceased—a practice that initially consisted of simple burials, cremations, and brief blessings."
     window hide
     scene sepatetodarkside with dissolve
-    call screen wait_screen(2.0)
+    call screen wait_screen(1.0)
     window show
-    "Over time, however, these customs evolved into elaborate ceremonies accepted as normal, with no one questioning where these people came from. As long as they believed in the same ideals, no doubt was cast upon them."
+    "Over time, however..."
+    "These customs evolved into elaborate ceremonies accepted as normal, with no one questioning where these people came from.."
+    "As long as they believed in the same ideals, no doubt was cast upon them."
     window hide
     scene trio with dissolve
-    call screen wait_screen(2.0)
+    call screen wait_screen(1.0)
     window show
-    "Then came the modern era—the Age of Truth—a time when the new generation no longer accepted blind faith, but sought evidence behind every belief. These truth-seekers became known as scientists."
+    "Then came the modern era—the Age of Truth—a time when the new generation no longer accepted blind faith"
+    "But sought evidence behind every belief. These truth-seekers became known as scientists."
     window hide
-    scene Who with dissolve
-    call screen wait_screen(2.0)
+    scene seek with dissolve
+    call screen wait_screen(1.0)
     window show
-    "In the beginning, society resisted them, for their truths contradicted the long-standing faith. But the scientists did not give up. They continued to seek out the truth and share it with the world, leading us to the present day—an age where belief and science coexist in harmony."
+    "In the beginning, society resisted them, for their truths contradicted the long-standing faith."
+    "But the scientists did not give up."
+    "They continued to seek out the truth and share it with the world, leading us to the present day—an age where belief and science coexist in harmony."
     window hide
     scene promise with dissolve
-    call screen wait_screen(2.0)
+    call screen wait_screen(1.0)
     window show
     "That harmony, however..."
     window hide
     scene brokenpromise with dissolve
-    call screen wait_screen(2.0)
+    call screen wait_screen(1.0)
     window show
     " would soon be shattered... For the deity once revered was not the exalted being people worshipped, but rather a dangerous entity to be feared."
     window hide
@@ -111,6 +118,7 @@ label bedroomscene:
     call screen wait_screen(2.0)
     scene wakeupopen with dissolve
     call screen wait_screen(2.0)
+    play sound "phonecall.mp3" fadein 0.5 volume 0.1
     scene wakeupnotice with dissolve
     call screen wait_screen(2.0)
     scene phonering with dissolve
@@ -119,7 +127,6 @@ label bedroomscene:
     call screen wait_screen(2.0)
     scene phonegrab with dissolve
     call screen wait_screen(2.0)
-    play sound "phonecall.mp3" fadein 0.5 volume 0.1
     queue sound "phone-pick-up-46796.mp3" fadein 0.5 volume 0.5
 
     playername "Hello?"
@@ -139,13 +146,21 @@ label bedroomscene:
     return
 
 label funeral :
+    scene susan_church with dissolve
+    call screen wait_screen(2.0)
     play music "funeral.mp3" fadein 0.5
-    scene bg funeral
-    with dissolve
 
+    "The ceremony is over, what would you like to do?"
+
+    menu:
+        "Comfort your parents":
+            jump comfort_parents
+        "Get some fresh air":
+            jump priest_action
+label priest_action :
     scene bg met the priest
     with dissolve
-
+    show screen quest_notification
     "Your action?"
     
     menu:
@@ -235,6 +250,7 @@ label chruch:
     with dissolve
     
     return
+return
 
 ######################
 
@@ -544,5 +560,18 @@ screen quest_notification():
         text "Quest " size 18 color "#fff"
         text "[current_quest]" size 16 color "#fff"
 
+label comfort_parents:
+    scene susan_church with dissolve
+    play music "funeral.mp3" fadein 0.5
 
-
+        playername"mom.. dad.. are you alright?"
+        mother"son I'm.."
+        playername"mom..*hug*"
+        mother"Thanks my boy I'm better now "
+        "your father are in his own mind.."
+        "Your mother will be takecare him"
+        "For now let's get some fresh air"
+    menu :
+        "Get some fresh air":
+            jump priest_action
+    return
