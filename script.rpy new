@@ -1,0 +1,864 @@
+screen wait_screen(duration=2.0):
+    timer duration action Return()
+    key "mouseup_1" action NullAction()  # ปิดการคลิกซ้าย
+define playername = Character("[playername]")
+define Father = Character("Father")
+define priest = Character("Priest")
+define Mother = Character("Mother")
+
+default current_time = "morning"   # ค่าตั้งต้นคือเช้า
+default interaction_count = 0      # จำนวนการคุยที่เกิดขึ้นในวันนั้น
+
+# ฟังก์ชันอัปเดตเวลา
+init python:
+    def update_time():
+        global interaction_count
+        global current_time
+
+        interaction_count += 1
+        if interaction_count >= 3:
+            if current_time == "morning":
+                current_time = "night"
+            else:
+                current_time = "morning"
+            interaction_count = 0
+
+
+screen scene_interact():
+
+    # ปุ่มไปชิงช้า
+    imagebutton:
+        idle "exchage_prob.png"        # รูปตอนยังไม่ชี้เมาส์
+        hover "exchage_prob_click.png"      # รูปตอนชี้เมาส์
+        xpos 500
+        ypos 200
+        action Jump("swing")
+
+    # ปุ่มเมื่อกดไปที่เด็ก
+    imagebutton:
+        idle "exchage_prob.png"        # รูปตอนยังไม่ชี้เมาส์
+        hover "exchage_prob_click.png"      # รูปตอนชี้เมาส์
+        xpos 100
+        ypos 200
+        action Jump("children")
+
+
+label start:
+
+    scene name1
+    with fade
+    $ playername = renpy.input("Identify yourself",length=32)
+    $ playername = playername.strip()
+
+    if not playername :
+        $ playername = "Kenji"
+    playername "I'm [playername]."
+
+    jump history
+
+    return
+
+label history:
+    window hide  # ซ่อนหน้าต่างข้อความก่อนเริ่ม
+    play music "nocturnal-fantasy-enchanted-loop-284212.mp3" fadein 0.5
+    scene ritual with dissolve
+    call screen wait_screen(1.0)
+    "A long time ago, the belief in reincarnation emerged"
+    window hide
+    scene seprate with dissolve
+    call screen wait_screen(1.0)
+    window show
+    "Giving rise to a grand cult that called itself the 'Messengers of the Afterlife.'"
+    " They claimed to communicate with the god of Saṅsarās"
+    "The deity who governs the cycle of life."
+    " Thus began the ritual of delivering messages to the deceased—a practice that initially consisted of simple burials, cremations, and brief blessings."
+    window hide
+    scene sepatetodarkside with dissolve
+    call screen wait_screen(1.0)
+    window show
+    "Over time, however..."
+    "These customs evolved into elaborate ceremonies accepted as normal, with no one questioning where these people came from.."
+    "As long as they believed in the same ideals, no doubt was cast upon them."
+    window hide
+    scene trio with dissolve
+    call screen wait_screen(1.0)
+    window show
+    "Then came the modern era—the Age of Truth—a time when the new generation no longer accepted blind faith"
+    "But sought evidence behind every belief. These truth-seekers became known as scientists."
+    window hide
+    scene seek with dissolve
+    call screen wait_screen(1.0)
+    window show
+    "In the beginning, society resisted them, for their truths contradicted the long-standing faith."
+    "But the scientists did not give up."
+    "They continued to seek out the truth and share it with the world, leading us to the present day—an age where belief and science coexist in harmony."
+    window hide
+    scene promise with dissolve
+    call screen wait_screen(1.0)
+    window show
+    "That harmony, however..."
+    window hide
+    scene brokenpromise with dissolve
+    call screen wait_screen(1.0)
+    window show
+    " would soon be shattered... For the deity once revered was not the exalted being people worshipped, but rather a dangerous entity to be feared."
+    window hide
+    stop music fadeout 0.5
+
+    jump bedroomscene
+
+    return
+
+label bedroom_after:
+    scene bedroom_noon with dissolve
+    menu :
+        "take a rest":
+            jump bedroom_before
+    return
+
+label bedroom_before:
+    scene bedroom_morning with dissolve
+    menu :
+        "take a rest":
+            jump bedroom_after
+    return
+
+label bedroomscene:
+    play music "morning.mp3" fadein 0.5
+    scene wakeupclose with dissolve
+    call screen wait_screen(2.0)
+    scene wakeupopen with dissolve
+    call screen wait_screen(2.0)
+    play sound "phonecall.mp3" fadein 0.5 volume 0.1
+    scene wakeupnotice with dissolve
+    call screen wait_screen(2.0)
+    scene phonering with dissolve
+    call screen wait_screen(2.0)
+    scene phonehand with dissolve
+    call screen wait_screen(2.0)
+    scene phonegrab with dissolve
+    call screen wait_screen(2.0)
+    queue sound "phone-pick-up-46796.mp3" fadein 0.5 volume 0.5
+    scene
+
+    playername "Hello?"
+    Father "Hi,[playername] sorry for calling this early son.."
+    playername "It's fine, what's up?"
+    Father "well,*sign* listen carefully son... our granmma had pass away.."
+    playername "are you kidding?"
+    Father "Sorry son.."
+    Father"take your time... the funeral will be setting on Sunday 17.00 p.m. don't be late okay"
+    Father "Drive safe son, you can call us anytime okay?"
+    playername "yes.."
+    play sound "phonehangingup.mp3" fadein 0.5
+    stop music fadeout 0.5 
+
+    jump funeral
+
+    return
+
+label funeral :
+    scene susan_church with dissolve
+    call screen wait_screen(2.0)
+    play music "funeral.mp3" fadein 0.5
+
+    "The ceremony is over, what would you like to do?"
+
+    menu:
+        "Comfort your parents":
+            jump comfort_parents
+        "Get some fresh air":
+            jump priest_action
+label priest_action :
+    scene behind_the_tree with dissolve
+    call screen wait_screen(1.0)
+    "You found the priest doing something suspicious..."
+    "What would you like to do"
+    scene keepsake with dissolve
+    call screen wait_screen(2.0)
+
+    scene behind_the_tree
+    
+    menu:
+        "Ask the priest what is he doing":
+            jump askpriest
+
+        "insult the priest":
+            jump insult
+
+        "keep watching" :
+            jump keepwatch
+
+        "take a picture" :
+            jump takeapic
+
+
+    return
+
+label takeapic :
+    scene behind_the_tree with dissolve
+    call screen wait_screen(1.0)
+    "The priest notices you because of your flashlight."
+
+    jump fight
+
+    return
+
+label keepwatch :
+
+    scene behind_the_tree with dissolve
+    scene afterwatch with dissolve
+    call screen wait_screen(1.0)
+
+    jump bedroom_after
+
+    return
+
+label insult :
+    scene fight_background with dissolve
+
+    playername "What on earth are you doing with my granma keepsake!!"
+
+    jump fight
+
+    return
+
+label askpriest :
+    scene fight_background with dissolve
+    show priest_smile_ec
+    playername "what are you doing?"
+    hide priest_smile_ec
+    show priest_talk_smile_ec
+    priest "*surprised* I'm just doing an extra rite for mrs.angela"
+    hide priest_talk_smile_ec
+    show priest_smile_ec
+menu:
+
+    "ask again" :
+        jump askpriestsecondtime
+    "go home" :
+        jump bedroom
+    
+return 
+    
+
+label askpriestsecondtime :
+    playername "I don't remember there's an extra rite.. ,what are you doing?"
+    hide priest_smile_ec
+    show priest_smile_eo
+    hide priest_smile_eo
+    show priest_talk_smile_eo
+    priest "I'm just doing an extra rite for mrs.angela.."
+    hide priest_talk_smile_eo
+    show priest_smile_eo
+
+    menu:
+        "Your action?"
+
+        "Go back home" :
+            jump dead_priest_ask
+
+        "Ask again" :
+            jump askpriestthirdtime
+
+    return
+label dead_priest_ask:
+    scene priestdontrust with dissolve
+    call screen wait_screen(1.0)
+    scene killedbypriest with dissolve
+    call screen wait_screen(1.0)
+    return
+label askpriestthirdtime :
+
+    playername "seriously priest what are you doing.."
+    show priest_smile_eo
+    hide priest_smile_eo
+    show priest_smile_ec
+    priest "..."
+    jump dead_priest_ask
+
+    return
+
+label chruch:
+    scene chruch_morning
+    with dissolve
+    menu:
+        "ask the priest about the extra rite":
+            jump ask_quest_priest
+        "go to to library zone":
+            jump chruch_library    
+        "Forbidden room":
+            jump forbidden_room_mad
+        "Home":
+            jump bedroom_after
+
+    label ask_quest_priest:
+        menu:
+            "Ask about alternate methods of the ritual":
+                jump Ask_about_alternate_methods_of_the_ritual
+            "Ask about the additional ritual":
+                jump Ask_about_the_additional_ritual
+            "Thank for the additional ritual":
+                jump Thank_for_the_additional_ritual
+    return
+label Ask_about_alternate_methods_of_the_ritual:
+    scene bg
+    show priest_smile_ec
+    playername"Hello, Father."
+    hide priest_smile_ec
+    show priest_talk_smile_ec
+    priest"Hi,How could I help you?"
+    hide priest_talk_smile_ec
+    show priest_smile_ec
+    playername"Could you explain more about the spirit-message ritual? Are there other ways to perform it?"
+    hide priest_smile_ec
+    show priest_talk_smile_ec
+    priest"There’s no other way to perform it."
+    priest"Why do you ask? Is there anything I can help with?"
+    hide priest_talk_smile_ec
+    show priest_smile_eo
+    playername"Oh, I'm just curious. Thank you very much."
+    jump ask_quest_priest
+    return
+label Ask_about_the_additional_ritual:
+    scene bg
+    show priest_smile_eo
+    playername"What was the ritual you performed to send a message to my grandmother's spirit after the main ceremony?"
+    hide priest_smile_eo
+    show priest_angry_mc 
+    call screen wait_screen(1.0)
+    hide priest_angry_mc 
+    show priest_angry_mo
+    priest"You saw it, didn’t you..."
+    priest"well.., I was just offering a blessing to your grandmother, that’s all."
+    jump dead_library
+    return
+label Thank_for_the_additional_ritual:
+    scene bg
+    show priest_smile_eo
+    playername"Thank you for performing the additional spirit message ritual last time."
+    jump dead_library
+    return
+label chruch_library:
+    $ choice_count = 0  # ตัวแปรนับจำนวนการเลือก
+    scene Bookshelf with dissolve
+    "pick a book"
+    
+    menu:
+        "Rule":
+            show rule
+            $ choice_count += 1
+        "The Story of the Guide":
+            hide rule
+            show guide
+            $ choice_count += 1
+        "Massage Ceremony":
+            hide guide
+            show massage
+            $ choice_count += 1
+        "Rite steps":
+            hide massage
+            show step
+            $ choice_count += 1
+
+    if choice_count >= 3:
+        jump chruch_noon
+    else:
+        jump chruch_library2  # วนกลับมาให้เลือกต่อ ถ้ายังไม่ครบ 3 ครั้ง
+
+    return
+label chruch_noon:
+    scene chruch_noon with dissolve
+    "Your tired"
+    menu:
+        "Go back home":
+            jump bedroom_after
+    return
+    
+return
+
+######################
+label chruch_library2:
+    scene chruch_noon with dissolve
+    menu:
+        "Forbidden room":
+            jump forbidden_room
+        "Home":
+            jump bedroom_after
+    return
+
+label hospitol :
+    scene register with dissolve
+    call screen wait_screen(3.0)
+    scene front_hospital with dissolve
+    menu:
+        "Hospital Lobby":
+            jump hospital_Lobby
+        "Home":
+            jump bedroom_after
+return
+label hospitol2:
+    menu:
+        "Home":
+            jump bedroom_end
+    return
+
+label hospital_lobby:
+    scene hospital_Lobby     
+    menu :
+            "Document Storage Room":
+                jump document_storage_room
+            "Morgue":
+                jump Morgue
+            "Hospital entrance":
+                jump hospitol
+    return
+label document_storage_room:
+    scene documentroom
+    scene document2 with dissolve
+    call screen wait_screen(2.0)
+    jump hospital_lobby2
+    return
+label Morgue:
+    scene deadbody
+    scene morge1 with dissolve
+    call screen wait_screen(2.0)
+    scene morge2 with dissolve
+    call screen wait_screen(2.0)
+    jump hospital_lobby3
+    return
+label hospital_lobby2:
+    scene hospital_Lobby     
+    menu :
+        "Morgue":
+            jump Morgue
+        "Hospital entrance":
+            jump hospitol2
+    return
+label hospital_lobby3:
+    scene hospital_Lobby     
+    menu :
+            "Document Storage Room":
+                jump document_storage_room
+            "Hospital entrance":
+                jump hospitol2
+    return
+label fight :
+
+    transform alpha_dissolve:
+        alpha 0.0
+        linear 0.5 alpha 1.0
+        on hide:
+            linear 0.5 alpha 0
+    # This is to fade the bar in and out, and is only required once in your script
+
+init: ### just setting variables in advance so there are no undefined variable problems
+    $ timer_range = 0
+    $ timer_jump = 0
+    $ time = 0
+
+screen countdown:
+    timer 0.01 repeat True action If(time > 0, true=SetVariable('time', time - 0.01), false=[Hide('countdown'), Jump(timer_jump)]) 
+        ### ^this code decreases variable time by 0.01 until time hits 0, at which point, the game jumps to label timer_jump (timer_jump is another variable that will be defined later)
+
+    bar value time range timer_range xalign 0.5 yalign 0.9 xmaximum 300 at alpha_dissolve 
+        # ^This is the timer bar.
+
+label questiontime1 :
+
+    label menu1 :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'getpunch'
+        show screen countdown
+        scene fight_background with dissolve
+        show priest_guard_open
+        "The priest think that you are a threat"
+    menu:
+
+        "Throw a punch" :
+                jump menu2
+        "Dodge" :
+                jump menu3
+
+            
+    hide screen countdown
+    jump getpunch
+
+    label menu2 :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'getpunch'
+        show screen countdown
+        scene fight_background with dissolve
+        hide priest_guard_open
+        show priest_beenpunch
+        "The priest gets dizzy what will you do next?"
+
+        menu:
+            "Throw another puch":
+                jump getpunch
+
+            "Dodge":
+                jump menu3
+
+            "Ask him again":
+                jump getpunch
+
+        hide screen countdown
+        jump dead_injurd
+
+    label getpunch :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'getpunch'
+        show screen countdown
+
+        "You get dizzy what will you do next?"
+
+        menu:
+            "Run away":
+                jump dead_injurd
+
+            "Throw a punch":
+                jump priestfakepassout
+
+            "Ask him agian":
+                jump getpunch
+            "Dodge":
+                jump lostsomeenrgy
+
+    hide screen countdown
+    jump dead_injurd
+
+    label lostsomeenrgy :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'lostsomeenrgy'
+        show screen countdown
+
+        "You have lost some enenergy what will you do next?"
+
+        menu:
+            "Run away":
+                jump dead_injurd
+            "Throw a punch":
+                jump priestfakepassout
+            "Ask him agian":
+                jump getpunch
+            "Dodge":
+                jump getpunch
+
+    hide screen countdown
+    jump dead_injurd
+    
+    label menu3 :
+        $ time = 5
+        $ timer_range = 5
+        $ timer_jump = 'dead'
+        show screen countdown
+
+        "Your action?"
+
+        menu:
+            "Run away":
+                jump dead_injurd
+            "Throw a punch":
+                jump priestfakepassout
+            "Ask him agian":
+                jump getpunch
+            "Dodge":
+                jump getpunch
+
+        hide screen countdown
+        jump dead_injurd
+
+    label priestfakepassout :
+        "The priest has pass out ,what will you do next? "
+    menu:
+        "Call the police":
+            jump dead_injurd
+        "Go back home":
+            jump bedroom_fight
+        "Call out for help":
+            jump dead_injurd
+
+    return
+label forbidden_room:
+    scene forbiddenroom
+    scene f1 with dissolve
+    call screen wait_screen(2.0)
+    scene f2 with dissolve
+    call screen wait_screen(2.0)
+    scene f3 with dissolve
+    call screen wait_screen(2.0)
+    jump bedroom_after
+    return
+label bedroom_priest_night:
+    scene bedroom with dissolve
+    menu :
+        "take a rest":
+            jump bedroom_priest_morning
+    return
+label bedroom_priest_morning:
+    scene bedroom with dissolve
+    menu :
+        "Go to town center church":
+            jump town_center_church_priest
+        "Go to playground":
+            jump playground
+    return
+label town_center_church_priest:
+    scene bg chruch
+    with dissolve
+    menu:
+        "go to to library zone":
+            jump chruch_library_mad    
+        "Forbidden room":
+            jump forbidden_room_mad
+
+    label chruch_library_mad:
+    $ choice_count = 0  # ตัวแปรนับจำนวนการเลือก
+    scene library with dissolve
+    "pick a book"
+
+    menu:
+        "Rule":
+            show rule
+            $ choice_count += 1
+        "The Story of the Guide":
+            hide rule
+            show guide
+            $ choice_count += 1
+        "Massage Ceremony":
+            hide guide
+            show massage
+            $ choice_count += 1
+        "Rite steps":
+            hide massage
+            show step
+            $ choice_count += 1
+
+    if choice_count >= 3:
+        jump dead_library
+    else:
+        jump chruch_library_mad  # วนกลับมาให้เลือกต่อ ถ้ายังไม่ครบ 3 ครั้ง
+
+    return
+
+    label forbidden_room_mad:
+        scene forbidden_room_mad
+        jump dead_forbiddenroom
+        return
+    
+    return
+label dead_library:
+    scene priestdontrust with dissolve
+    call screen wait_screen(2.0)
+    return
+label dead_forbiddenroom:
+    scene got_caught with dissolve
+    call screen wait_screen(2.0)
+    return
+
+#############################
+# เก็บไว้ใน init python หรือเริ่มต้นเกม
+init python:
+    inventory = []
+    toy_collected = False  # ของเล่นเก็บไปแล้วยัง
+    quest_1_done = False
+    current_quest = "Find the lost toys"
+
+screen show_inventory():
+    frame:
+        xalign 0.95
+        yalign 0.05
+        padding 10
+        background "#3338"
+        has vbox
+        text "🎒 Inventory" size 22 color "#fff"
+        for item in inventory:
+            text "[item]" size 18 color "#fff"
+
+
+
+label playground:
+
+    scene bg playground
+    show screen toy_scene
+    show screen quest_notification
+
+    if not toy_collected:
+        "You see something on the floor.."
+    else:
+        $ current_quest = "Give the lost toys"
+        "you have gather all the toys"
+
+
+    label children:
+    scene bg children
+    show po normal at left
+    show kids happy at right
+
+    playername "Hey kids, do you happen to know the person in this picture?"
+
+    kid "Oh! You mean this scientist guy? Yeah, I kind of know who he is."
+
+    kid "But first, you have to help us find three items — a windmill, a robot, and a wooden sword."
+
+    playername "Alright, kids. But you'd better not break your promise."
+
+    kid "We promise!!"
+
+    jump collect_item
+
+
+    return
+
+label swing:
+    scene bg swing
+    with dissolve
+    label playground_event:
+
+    playername"Ugh... I'm so stressed out."
+
+    show kids happy at right
+    with dissolve
+
+    kid "Hey!! Big bro!"
+
+    playername "Huh?! What is it?"
+
+    kid "Why are you so stressed, big bro? We've been watching you frown for a while now."
+
+    playername "Well... I've got something on my mind."
+
+    "(Po tells the kids about what's been bothering him.)"
+
+    kid "Hmm... Then let us take you to a scientist we know. I think he might be able to help you."
+
+    kid "But you have to help us find three items first — a windmill, a robot, and a wooden sword."
+
+    playername "Alright, kids. But you better keep your promise."
+
+    kid "You got it!!"
+    
+    $ quest_active = True
+    $ quest_items = []
+
+    jump collect_item
+
+
+    return
+
+label collect_item: 
+
+    scene bg playground  # ใส่พื้นหลังสนามเด็กเล่น
+
+    show screen show_inventory
+
+    show screen toy_scene
+
+screen toy_scene():
+    if not toy_collected:
+        imagebutton:
+            idle "images/exchange_prob.png"
+            hover "images/exchange_prob_click.png"
+            xpos 600
+            ypos 300
+            focus_mask True
+            action [
+                SetVariable("toy_collected", True),
+                Function(inventory.append, "Toy"),
+                Hide("toy_scene"),
+                Notify("You have pick up the toy")
+            ]
+
+    textbutton "back":
+        xpos 50
+        ypos 500
+        action Return()
+
+
+label toy_pickup:
+    call screen toy_scene
+    return
+
+
+label talk_to_kid:
+    scene bg playground_kid
+    show kid normal
+    show screen show_inventory
+    show screen quest_notification
+
+    if "Toy" in inventory:
+        "You found all the lost toy!?"
+        $ inventory.remove("Toy")
+        $ quest_1_done = True
+        "You give the toys back to the child"
+        $ current_quest = "Quest complete"
+        jump next_quest
+    else:
+        "Thank you very much.."
+
+        jump child_happy
+
+
+return
+screen quest_notification():
+    frame:
+        xalign 0.95
+        yalign 0.01
+        background "#0008"
+        padding (10, 5)
+        has vbox
+        text "Quest " size 18 color "#fff"
+        text "[current_quest]" size 16 color "#fff"
+
+label comfort_parents:
+    scene susan_church with dissolve
+    play music "funeral.mp3" fadein 0.5
+    show mom_dad with dissolve
+    playername "mom.. dad.. are you alright?"
+    hide mom_dad with dissolve
+    show mom_ol2 with dissolve
+    Mother"son I'm.."
+    hide mom_ol2 
+    show mom_c2 with dissolve
+    playername "mom..*hug*"
+    hide mom_ol2 
+    show mom_ow2 with dissolve
+    Mother"Thanks my boy I'm better now "
+    scene susan_church
+    show dad_c with dissolve
+    "your father is in his own mind.."
+    "Your mother will be takecare him"
+    hide dad_c with dissolve
+    "For now let's get some fresh air"
+    menu :
+        "Get some fresh air":
+            jump priest_action
+    return
+label bedroom_end:
+    scene bedroom_after
+    scene truth with dissolve
+    call screen wait_screen(2.0)
+    menu:
+        "Hide it, and let the world go on unchanged…":
+            jump badend1
+        "reveal everything, no matter the cost?":
+            jump goodend1
+    return
+label badend1:
+    scene badendp with dissolve
+    call screen wait_screen(2.0)
+    return
+label goodend1:
+    scene truthreveal with dissolve
+    call screen wait_screen(2.0)
+    return
+
+label dead_injurd:
+    scene injurd with dissolve
+    call screen wait_screen(2.0)
+    return
